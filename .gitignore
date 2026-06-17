@@ -1,5 +1,6 @@
 # i added for macos
 .DS_Store
+agent-env/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -223,4 +224,3 @@ __marimo__/
 # MLflow local tracking artifacts
 mlflow.db
 mlruns/
-agent-env/
