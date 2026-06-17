@@ -1,11 +1,16 @@
 """Shared setup helpers for Databricks + OpenAI notebooks."""
 
 from dataclasses import dataclass
+import logging
 import os
 
 from dotenv import load_dotenv
-import openai
 from pprintpp import pprint
+from langchain_openai import ChatOpenAI
+
+import openai
+import json
+import warnings
 
 # This dataclass holds the Databricks configuration loaded from environment variables.
 # The `frozen=True` parameter makes it immutable, which is a good practice for configuration objects.
@@ -55,7 +60,23 @@ def create_databricks_client(config: DatabricksConfig) -> openai.OpenAI:
         base_url=f"{config.host}/serving-endpoints",
     )
 
+def enable_logging():
+    import logging
 
+    logging.disable(logging.NOTSET)
+
+    # root = logging.getLogger()
+    # root.setLevel(logging.DEBUG)
+    # for h in root.handlers:
+    #     h.setLevel(logging.DEBUG)
+
+    logging.basicConfig(level=logging.DEBUG, force=True) # to show the communication embedding model and the vector store
+
+def disable_logging():
+    import logging
+
+    logging.disable(logging.CRITICAL)
+    
 def bootstrap_notebook(validate: bool = True):
     """Return notebook-ready variables: token, host, endpoint, and configured client."""
     config = get_databricks_config(validate=validate)
@@ -63,4 +84,11 @@ def bootstrap_notebook(validate: bool = True):
     return config.token, config.host, config.endpoint, client
 
 if __name__ == "__main__":
+    warnings.filterwarnings("ignore", module="pydantic")
+    try:
+        from pydantic.warnings import PydanticDeprecatedSince20
+        warnings.filterwarnings("ignore", category=PydanticDeprecatedSince20)
+    except Exception:
+        pass
+
     DATABRICKS_TOKEN, DATABRICKS_HOST, DATABRICKS_MODEL, client = bootstrap_notebook()

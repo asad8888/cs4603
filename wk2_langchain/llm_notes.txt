@@ -1,0 +1,122 @@
+Comprehensive Technical Corpus for RAG, Transformers, LLMs, and LangChain
+
+This document is intentionally verbose and redundant in certain areas to support chunking, embedding generation, and similarity search benchmarking. Each section contains explanatory text, repeated phrasing, and varied wording to simulate real-world corpora.
+
+============================
+SECTION 1: TRANSFORMERS (DETAILED THEORY)
+============================
+Transformers are neural network architectures designed to process sequential data using attention mechanisms instead of recurrence or convolution. Unlike RNNs, transformers process all tokens in parallel, which significantly improves training efficiency.
+
+Self-attention allows each token to attend to every other token in the sequence. For a sequence of length n, this results in an n x n attention matrix.
+
+Mathematical Detail:
+Given embeddings X, queries Q = XW_q, keys K = XW_k, values V = XW_v:
+Attention(Q, K, V) = softmax(QK^T / sqrt(d_k)) V
+
+Explanation:
+- QK^T computes similarity between tokens
+- sqrt(d_k) stabilizes scaling
+- softmax converts scores into probabilities
+
+Multi-head attention splits embeddings into multiple subspaces, allowing the model to capture diverse relationships simultaneously. Each head learns different linguistic or semantic aspects such as syntax, semantics, or positional relationships.
+
+Transformers include residual connections, layer normalization, and position-wise feedforward networks. These components stabilize deep training and improve gradient flow.
+
+============================
+SECTION 2: LARGE LANGUAGE MODELS (LLMs)
+============================
+Large Language Models are built on transformer architectures and trained on massive datasets comprising books, articles, code, and web data.
+
+Training occurs in stages:
+1. Tokenization
+   - Converts raw text into tokens using algorithms like BPE or SentencePiece
+2. Pretraining
+   - Model learns statistical language patterns
+3. Fine-tuning
+   - Model adapts to tasks like QA or chat
+
+During training, the objective is to minimize cross-entropy loss. The model predicts probability distributions over vocabulary tokens.
+
+Example:
+Input: "The capital of France is"
+Output probabilities:
+- Paris: 0.92
+- London: 0.03
+- Berlin: 0.02
+
+Scaling laws show that performance improves as model size and data increase, but at diminishing returns.
+
+============================
+SECTION 3: EMBEDDINGS AND VECTOR REPRESENTATION
+============================
+Embeddings convert text into dense numerical vectors in high-dimensional space (e.g., 768 or 1536 dimensions).
+
+Semantic similarity is captured through vector proximity. Words like “car” and “automobile” have similar embeddings.
+
+Cosine Similarity Formula:
+cos(theta) = (A . B) / (||A|| * ||B||)
+
+Embedding models include:
+- OpenAI embeddings
+- Sentence Transformers
+- Word2Vec (older)
+
+============================
+SECTION 4: VECTOR DATABASES
+============================
+Vector databases store embeddings and enable efficient similarity search.
+
+Core Concepts:
+- Indexing structures (HNSW, IVF)
+- Approximate nearest neighbor (ANN)
+
+HNSW builds a graph of vectors for fast lookup, while IVF clusters vectors into partitions for efficient searching.
+
+============================
+SECTION 5: RETRIEVAL AUGMENTED GENERATION (RAG)
+============================
+RAG integrates retrieval systems with generative models to reduce hallucinations.
+
+Pipeline detail:
+- Input query → embedding
+- Vector search → retrieve top-k documents
+- Concatenate documents into prompt
+- LLM generates response
+
+Enhancements:
+- Re-ranking improves document order
+- Metadata filtering
+- Chunk overlap improves context retention
+
+============================
+SECTION 6: LANGCHAIN FRAMEWORK
+============================
+LangChain orchestrates LLM workflows.
+
+Typical Pipeline:
+DocumentLoader → TextSplitter → Embeddings → VectorStore → Retriever → LLM Chain
+
+Chunking Strategy:
+Chunk size: 200–1000 tokens
+Overlap: 10–20%
+
+============================
+SECTION 7: SYNTHETIC REPETITIVE CONTENT FOR EMBEDDINGS
+============================
+The transformer model uses attention mechanisms. Attention mechanisms allow contextual understanding. Contextual understanding improves semantic representation. Semantic representation enables similarity search. Similarity search retrieves relevant information. Relevant information improves LLM outputs.
+
+The transformer model uses attention mechanisms. Attention mechanisms allow contextual understanding. Contextual understanding improves semantic representation. Semantic representation enables similarity search.
+
+Embeddings map text into vector space. Vector space enables similarity comparison. Similarity comparison retrieves nearest neighbors. Nearest neighbors provide context. Context improves response quality.
+
+============================
+SECTION 8: SAMPLE QUERIES FOR TESTING RAG
+============================
+- Explain attention in transformers
+- What is cosine similarity?
+- How does RAG improve LLM performance?
+- What is HNSW indexing?
+
+============================
+END OF LARGE CORPUS
+============================
