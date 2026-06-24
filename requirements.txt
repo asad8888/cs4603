@@ -12,6 +12,7 @@ langchain-postgres
 psycopg[binary]
 pgvector
 ipykernel
+ipywidgets
 tiktoken
 mlflow
 iprogress

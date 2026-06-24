@@ -21,6 +21,9 @@ from langchain_core.messages import ToolMessage
 
 import openai
 import json
+import uuid
+import mlflow
+
 import warnings
 from pprintpp import pprint as pp
 
@@ -116,6 +119,13 @@ def get_agent_instance(llm):
     agent = create_agent(llm)
     return agent
 
+def new_conversation_id() -> str:
+    return str(uuid.uuid4())
+  
+def make_thread_config(user_id: str) -> dict:
+    conversation_id = new_conversation_id()
+    return {"configurable": {"thread_id": f"user-{user_id}:conv-{conversation_id}"}}
+
 def bootstrap_notebook(validate: bool = True):
     """Return notebook-ready variables: token, host, endpoint, and configured client."""
     config = get_databricks_config(validate=validate)
@@ -131,5 +141,6 @@ if __name__ == "__main__":
     except Exception:
         pass
 
-    pgvectordb_conn = "postgresql+psycopg://langchain:langchain!@localhost:5432/cs4603_vectordb"
+    pgvectordb_conn = "postgresql+psycopg://langchain:langchain!@localhost:5432/cs4603_vectordb"  
+
     DATABRICKS_TOKEN, DATABRICKS_HOST, DATABRICKS_MODEL, (llm, llm_noreason), databricks_embeddings = bootstrap_notebook()
