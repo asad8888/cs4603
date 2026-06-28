@@ -12,6 +12,7 @@ langchain-postgres
 psycopg[binary]
 pgvector
 ipykernel
+ipywidgets
 tiktoken
 mlflow
 iprogress
@@ -19,3 +20,7 @@ pprintpp
 pypdf
 bs4
 markitdown 
+streamlit
+streamlit-chat
+tavily-python
+pandas

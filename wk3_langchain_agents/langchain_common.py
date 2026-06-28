@@ -1,10 +1,8 @@
-"""Shared setup helpers for Databricks + OpenAI notebooks."""
-
 from dataclasses import dataclass
 import os
 
 from dotenv import load_dotenv
-import pprintpp
+from typing import Union
 
 from langchain_openai import ChatOpenAI
 from langchain_openai import OpenAIEmbeddings
@@ -16,10 +14,18 @@ from langchain_postgres import PGVector
 from langchain_community.document_loaders import WebBaseLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.output_parsers import StrOutputParser
+from langchain_core.tools import tool
+from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
+from langchain.agents import create_agent
+from langchain_core.messages import ToolMessage
 
 import openai
 import json
+import uuid
+import mlflow
+
 import warnings
+from pprintpp import pprint as pp
 
 def enable_logging():
     import logging
@@ -85,12 +91,14 @@ def create_databricks_client(config: DatabricksConfig) -> openai.OpenAI:
         model=config.endpoint,
         api_key=config.token,
         base_url=f"{config.host}/serving-endpoints",
+        temperature=0,
     )
     llm_noreason = ChatOpenAI(
         model=config.endpoint,
         api_key=config.token,
         base_url=f"{config.host}/serving-endpoints",
         reasoning_effort="none",
+        temperature=0,
     )
     databricks_embeddings = OpenAIEmbeddings(
         model="databricks-gte-large-en",
@@ -100,6 +108,23 @@ def create_databricks_client(config: DatabricksConfig) -> openai.OpenAI:
     )
 
     return llm, llm_noreason, databricks_embeddings
+
+def get_tool_agent_instance(llm, tools):
+    """Create an agent instance with the given LLM and tools."""
+    agent = create_agent(llm=llm, tools=tools)
+    return agent
+
+def get_agent_instance(llm):
+    """Create an agent instance with the given LLM and tools."""
+    agent = create_agent(llm)
+    return agent
+
+def new_conversation_id() -> str:
+    return str(uuid.uuid4())
+  
+def make_thread_config(user_id: str) -> dict:
+    conversation_id = new_conversation_id()
+    return {"configurable": {"thread_id": f"user-{user_id}:conv-{conversation_id}"}}
 
 def bootstrap_notebook(validate: bool = True):
     """Return notebook-ready variables: token, host, endpoint, and configured client."""
@@ -116,5 +141,6 @@ if __name__ == "__main__":
     except Exception:
         pass
 
-    pgvectordb_conn = "postgresql+psycopg://langchain:langchain!@localhost:5432/cs4603_vectordb"
+    pgvectordb_conn = "postgresql+psycopg://langchain:langchain!@localhost:5432/cs4603_vectordb"  
+
     DATABRICKS_TOKEN, DATABRICKS_HOST, DATABRICKS_MODEL, (llm, llm_noreason), databricks_embeddings = bootstrap_notebook()

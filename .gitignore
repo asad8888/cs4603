@@ -224,3 +224,4 @@ __marimo__/
 # MLflow local tracking artifacts
 mlflow.db
 mlruns/
+traces.json
